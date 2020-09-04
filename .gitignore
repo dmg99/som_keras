@@ -1,5 +1,5 @@
 build/
 dist/
-SOMkeras.eeg-info/
-examples/pretrained-models/
+som_keras.eeg-info/
+examples/pretrained_models/
 examples/figures/
