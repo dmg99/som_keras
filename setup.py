@@ -11,7 +11,7 @@ setuptools.setup(
     description="Self-Organizing map keras model",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="http://git.starlab.es/andres.rojas/py_stareeglab.git",
+    url="https://git.starlab.es/daniel.molinuevo/som_keras",
     packages=setuptools.find_packages(),
     classifiers=("Programming Language :: Python :: 3.6",
                  "License :: OSI Approved :: MIT License",
