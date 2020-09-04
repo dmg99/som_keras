@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: som-keras
+Version: 0.0.1
+Summary: Self-Organizing map keras model
+Home-page: https://git.starlab.es/daniel.molinuevo/som_keras
+Author: Daniel Molinuevo
+Author-email: daniel.molinuevo@starlab.es
+License: UNKNOWN
+Description: Keras implementation of a Self-Organizing map.
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.6
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown

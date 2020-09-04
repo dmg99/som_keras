@@ -1,7 +1,11 @@
 import numpy as np
+import tensorflow as tf
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatch
-
+from tensorflow import keras
+from som_keras.classification import classify_SOM
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 
 def visualize_labels(model, data=None, labels=None, bsize=32, 
                      normalize=False, lab_names=None, **kwargs):

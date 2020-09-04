@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="SOMkeras",
+    name="som_keras",
     version="0.0.1",
     author="Daniel Molinuevo",
     author_email="daniel.molinuevo@starlab.es",
