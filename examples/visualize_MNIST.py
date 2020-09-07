@@ -66,12 +66,12 @@ Umat = get_Umat(model)
 plt.imshow(Umat, cmap='Greys')
 plt.savefig(fig_dir+version+'/Umat.png')
 
-# Plot
+# Plot label distributions at each cell
 plt.figure()
 visualize_histograms(model, data_tf, labs, hparams['bsize'], normalize=True)
 plt.savefig(fig_dir+version+'/hists.png')
 
-# Plot
+# Plot most frequent label at each cell
 plt.figure()
 visualize_labels(model, data_tf, labs, hparams['bsize'])
 plt.savefig(fig_dir+version+'/classes.png')
@@ -86,3 +86,10 @@ plt.savefig(fig_dir+version+'/dimredPCA.png')
 
 plot_dimred_tsne(model, connect=True, use_labels=True)
 plt.savefig(fig_dir+version+'/dimredTSNE.png')
+
+# Plot class protypes using KDE
+model.switch_preds()
+data_pos = model.predict(data_tf)
+prototypes = compute_class_prototypes(model, data_pos, labs)
+plot_class_prototypes(prototypes, features_dim1=28, features_dim2=28,
+                      plot_shape=[2, 5])

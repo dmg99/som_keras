@@ -145,7 +145,17 @@ class SOM(keras.Model):
                                           dtype=tf.float64)
             self.w = tf.Variable(init_w, trainable=True, name='SOM-w')
             self.init_rand = False
+    
+    def switch_preds(self):
+        '''
+        Switches prediction mode.
+        If get_pos is True, it will predicted the position
+        on the grid (it returns the flattened index)
 
+        If get_pos is False it will return the most similar
+        weight on the grid.
+        '''
+        self.get_pos = not self.get_pos
 
     def get_labels(self):
         '''
