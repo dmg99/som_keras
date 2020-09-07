@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.metrics import davies_bouldin_score, silhouette_score
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.cluster import AgglomerativeClustering
 from scipy.stats import gaussian_kde
 
 
@@ -104,15 +105,12 @@ def classify_samples(self, data, bsize=32, get_scores=False):
     return predictions
 
 
-def compute_class_prototypes(model, data_pos, labels, 
-                            plot=True, **kwargs):
+def compute_class_prototypes(model, data_pos, labels):
     '''
     Uses kde on the SOM's grid to estimate a ponderated class mean.
     model: SOM model
     data_pos: input's data predicted positions in the SOM grid
     labels: input data labels
-    plot: whether to plot the prototypes or return them
-    **kwargs: arguments for plot_class_prototypes
     '''
     weights = model.w.numpy()
     # Get positions in 2D
@@ -137,10 +135,7 @@ def compute_class_prototypes(model, data_pos, labels,
         prototype = weights @ probs
         prototypes[i] = prototype
 
-    if not plot:
-        return prototypes
-    else:
-        plot_class_prototypes(prototypes, **kwargs)
+    return prototypes
 
 
 # Clustering methods
@@ -198,20 +193,16 @@ def optimal_nclusts(model, max_clusters=10, score='davies', **kwargs):
     return best_n
 
 
-def plot_cluster_dists(model, nclusts, data_pos, data_labs, 
-                       lab_names=None, get_means=True, 
-                       figure=None, **kwargs):
+def get_clusters_means(model, nclusts, data_pos, data_labs, 
+                       **kwargs):
     '''
     For each cluster plots the amount of samples of each class in it.
         model: SOM model
         nclusts: number of clusters to use
         data_pos: input's data predicted positions in the SOM grid
         data_labs: input's data corresponding labels
-        lab_names: names for the different labels
-        get_means: whether to also compute each cluster mean
-        **kwargs: arguments for plt.bar
     returns:
-        means: (np array) if get_means is True returns array of
+        means: (np array) returns array of
                 cluster means of shape (n_clusters x n_features)
     '''
 
@@ -222,25 +213,10 @@ def plot_cluster_dists(model, nclusts, data_pos, data_labs,
     # Vector to store each cluster mean
     weights = model.w.numpy().T
     means = np.zeros((len(np.unique(clust_SOM)), weights.shape[1]))
-    if figure is None:
-        figure = plt.figure(None, (35, 15))
     
     for clust in np.unique(clust_SOM):
-        # Count occurences of each class
-        counts = np.zeros(len(np.unique(data_labs)))
-        for i, lab in enumerate(np.unique(data_labs)):
-            counts[i] = np.sum(data_labs[clust_data == clust] == lab)
-        
-        # Bar plot
-        figure.add_subplot(4, 3, clust+1)
-        if lab_names is None:
-            lab_names = np.unique(data_labs)
-        plt.bar(lab_names, counts, **kwargs)
-        plt.title(f'Cluster {clust:.0f}')
-        
         # Compute cluster mean
         means[clust] = np.mean(weights[clust_SOM == clust], axis=0)
     
-    if get_means:
-        return means
+    return means
 

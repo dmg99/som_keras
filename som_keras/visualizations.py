@@ -1,9 +1,11 @@
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatch
+import matplotlib.patches as mpatches
+from matplotlib import cm
+from matplotlib.colors import Normalize
 from tensorflow import keras
-from som_keras.classification import classify_SOM
+from som_keras.classification import classify_SOM, cluster_SOM
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
@@ -288,3 +290,51 @@ def get_Umat(model, mean_dist=True, connect8=True):
         Umat = Umat.reshape((2*model.dim_len[0]-1, 2*model.dim_len[1]-1))
         
     return Umat
+
+
+def plot_cluster_dists(model, nclusts, data_pos, data_labs, 
+                       lab_names=None, get_means=True, 
+                       figure=None, **kwargs):
+    '''
+    For each cluster plots the amount of samples of each class in it.
+        model: SOM model
+        nclusts: number of clusters to use
+        data_pos: input's data predicted positions in the SOM grid
+        data_labs: input's data corresponding labels
+        lab_names: names for the different labels
+        get_means: whether to also compute each cluster mean
+        **kwargs: arguments for plt.bar
+    returns:
+        means: (np array) if get_means is True returns array of
+                cluster means of shape (n_clusters x n_features)
+    '''
+
+    # Predict cluster labels for SOM and data
+    clust_SOM = cluster_SOM(model, nclusts)
+    clust_data = clust_SOM[data_pos]
+
+    # Vector to store each cluster mean
+    weights = model.w.numpy().T
+    means = np.zeros((len(np.unique(clust_SOM)), weights.shape[1]))
+    if figure is None:
+        figure = plt.figure(None, (35, 15))
+    
+    for clust in np.unique(clust_SOM):
+        # Count occurences of each class
+        counts = np.zeros(len(np.unique(data_labs)))
+        for i, lab in enumerate(np.unique(data_labs)):
+            counts[i] = np.sum(data_labs[clust_data == clust] == lab)
+        
+        # Bar plot
+        figure.add_subplot(4, 3, clust+1)
+        if lab_names is None:
+            lab_names = np.unique(data_labs)
+        plt.bar(lab_names, counts, **kwargs)
+        plt.title(f'Cluster {clust:.0f}')
+        
+        # Compute cluster mean
+        means[clust] = np.mean(weights[clust_SOM == clust], axis=0)
+    
+    if get_means:
+        return means
+
