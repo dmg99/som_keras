@@ -9,6 +9,7 @@ from scipy.sparse import lil_matrix, csr_matrix
 class SOM(keras.Model):
     '''
     Keras implementation of a Self-Organizing map.
+    In order to extract the trained weights, us
     '''
     def __init__(self, dim_len, sigma=1, data=None, max_dim_len=10, **kwargs):
         '''
@@ -145,7 +146,15 @@ class SOM(keras.Model):
                                           dtype=tf.float64)
             self.w = tf.Variable(init_w, trainable=True, name='SOM-w')
             self.init_rand = False
-    
+
+    def get_weights(self):
+        '''
+        Returns the SOM weights as numpy array of shape
+        (n_neurons x n_features).
+        '''
+        return self.w.numpy().T
+
+
     def switch_preds(self):
         '''
         Switches prediction mode.
@@ -156,6 +165,7 @@ class SOM(keras.Model):
         weight on the grid.
         '''
         self.get_pos = not self.get_pos
+
 
     def get_labels(self):
         '''
