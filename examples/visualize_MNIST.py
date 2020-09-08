@@ -93,3 +93,4 @@ data_pos = model.predict(data_tf)
 prototypes = compute_class_prototypes(model, data_pos, labs)
 plot_class_prototypes(prototypes, features_dim1=28, features_dim2=28,
                       plot_shape=[2, 5])
+plt.savefig(fig_dir+version+'/class_prototypes')

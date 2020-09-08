@@ -44,6 +44,13 @@ def q_error(y_true, y_pred, reduction='mean'):
     return red_q_error
 
 
+def r_squared(y_true, y_pred):
+    error = q_error(y_true, y_pred)
+    var = tf.math.reduce_variance(y_true, axis=0)
+    total_var = tf.math.reduce_sum(var, axis=0)
+    return 1-error/total_var
+
+
 def topographic_error(model, data):
     '''
     Computes the fraction of data points for which the first
