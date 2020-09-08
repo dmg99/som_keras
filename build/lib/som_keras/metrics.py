@@ -44,7 +44,14 @@ def q_error(y_true, y_pred, reduction='mean'):
     return red_q_error
 
 
+
 def r_squared(y_true, y_pred):
+    '''
+    Computes R^2 as 1-quantization_error/variance. Similar
+    to what is usually done in linear models
+        y_true: (tf Tensor) input data
+        y_pred: (tf Tensor) prediction (quantized data)
+    '''
     error = q_error(y_true, y_pred)
     var = tf.math.reduce_variance(y_true, axis=0)
     total_var = tf.math.reduce_sum(var, axis=0)
