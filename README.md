@@ -1,7 +1,6 @@
 # Keras implementation of a Self-Organizing map.
 
-This corresponds to a first version of a Self-Organizing map implemented as a keras.Model.
-
+This corresponds to a first version of a Self-Organizing map implemented as a keras.Model. This was implemented during an internship at [Starlab](https://www.starlab.es/) under the supervision of Aureli Soria-Frisch (https://github.com/aurelisoriafrisch) and Eleni Kroupi.
 ## Main features
 
 This first version supports the following features:
